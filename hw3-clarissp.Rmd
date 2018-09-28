@@ -9,31 +9,54 @@ output: html_document
 require(rgdal)
 require(leaflet)
 require(leaflet.extras)
-
 require(dplyr)
 require(readxl)
 require(stringr)
 ```
 
-```{r}
-#Loading in my different layers
-counties <- readOGR("SouthwestPACounties_Features.geojson")
-resilient <- readOGR("SouthwestPAResilientNetwork_.geojson")
-aml <- readOGR("AbandonedMineLands_FeaturesT.geojson")
-industrialmines <- readOGR("SouthwestPAIndustrialMineral.geojson")
-```
 
 ```{r}
-leaflet() %>%
-  #Basemaps that users can choose from 
-  addProviderTiles(providers$Esri.WorldGrayCanvas, options = providerTileOptions(noWrap = TRUE)) %>%
-  addProviderTiles(providers$CartoDB.DarkMatterNoLabels, options = providerTileOptions(noWrap = TRUE)) %>%
-  addProviderTiles(providers$Thunderforest.Pioneer, options = providerTileOptions(noWrap = TRUE)) %>%
-  
-  addLayersControl(
-    baseGroups = c("Gray Canvas", "Dark Matter", "Pioneer"),
-    options = layersControlOptions(collapsed = FALSE)
+#Importing data for the map
+county2 <- readOGR("Allegheny_County_Boundary.geojson")
+senate <- readOGR("Allegheny_County_Pennsylvania_Senate_District_Boundaries.geojson")
+wic <- readOGR("Allegheny_County_WIC_Vendor_Locations.geojson")
+```
+
+
+```{r}
+icons <- awesomeIconList(
+  makeAwesomeIcon(icon = "female", library = "fa", markerColor = "red")
   )
+
+symbology <- colorFactor(c("#738BC1", "#C9705E"), c("R", "D"))
+
+leaflet() %>% 
+  setView(lng = -79.995575, lat = 40.4406763, zoom = 10) %>%
+  #Basemaps that users can choose from 
+  addProviderTiles("Esri.WorldGrayCanvas", group = "Gray Canvas", options = providerTileOptions(noWrap = TRUE)) %>%
+  addProviderTiles("CartoDB.DarkMatterNoLabels", group = "Dark Matter", options = providerTileOptions(noWrap = TRUE)) %>%
+  addProviderTiles("Esri.WorldTopoMap", group = "Topography", options = providerTileOptions(noWrap = TRUE)) %>%
+  
+  #Allows users to choose which basemap 
+  addLayersControl(
+    baseGroups = c("Gray Canvas", "Dark Matter", "Topography"),
+    options = layersControlOptions(collapsed = TRUE)
+  ) %>%
+  addPolylines(data= county2,color = "#292929") %>%
+  addPolygons(data = senate, color = ~symbology(as.factor(PARTY))) %>%
+  addLegend(position = "bottomright", pal = symbology, values = as.factor(senate$PARTY), title = "Political Party") %>%
+  
+  addAwesomeMarkers(data = wic, icon = ~icons)
+
+
+```
+
+
+```{r}
+leaflet(data=county) %>%
+  addPolygons()
+  
   
 ```
+
 
