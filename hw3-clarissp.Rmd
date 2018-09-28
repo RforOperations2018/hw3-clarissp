@@ -23,3 +23,17 @@ aml <- readOGR("AbandonedMineLands_FeaturesT.geojson")
 industrialmines <- readOGR("SouthwestPAIndustrialMineral.geojson")
 ```
 
+```{r}
+leaflet() %>%
+  #Basemaps that users can choose from 
+  addProviderTiles(providers$Esri.WorldGrayCanvas, options = providerTileOptions(noWrap = TRUE)) %>%
+  addProviderTiles(providers$CartoDB.DarkMatterNoLabels, options = providerTileOptions(noWrap = TRUE)) %>%
+  addProviderTiles(providers$Thunderforest.Pioneer, options = providerTileOptions(noWrap = TRUE)) %>%
+  
+  addLayersControl(
+    baseGroups = c("Gray Canvas", "Dark Matter", "Pioneer"),
+    options = layersControlOptions(collapsed = FALSE)
+  )
+  
+```
+
