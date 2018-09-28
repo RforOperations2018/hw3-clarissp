@@ -1,0 +1,25 @@
+---
+title: "hw3-clarissp"
+author: "Clarissa Paz"
+date: "9/26/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(rgdal)
+require(leaflet)
+require(leaflet.extras)
+
+require(dplyr)
+require(readxl)
+require(stringr)
+```
+
+```{r}
+#Loading in my different layers
+counties <- readOGR("SouthwestPACounties_Features.geojson")
+resilient <- readOGR("SouthwestPAResilientNetwork_.geojson")
+aml <- readOGR("AbandonedMineLands_FeaturesT.geojson")
+industrialmines <- readOGR("SouthwestPAIndustrialMineral.geojson")
+```
+
