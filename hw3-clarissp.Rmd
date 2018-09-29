@@ -58,6 +58,5 @@ leaflet() %>%
   addAwesomeMarkers(data = wic, icon = ~icons, popup = ~Address) %>%
   #Adds Allegheny county line to map
   addPolylines(data= county, color = "black") 
-
 ```
 
