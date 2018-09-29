@@ -18,6 +18,7 @@ require(stringr)
 ```{r}
 #Importing data for the map
 county <- readOGR("Allegheny_County_Boundary.geojson")
+plot(county)
 senate <- readOGR("Allegheny_County_Pennsylvania_Senate_District_Boundaries.geojson")
 wic <- readOGR("Allegheny_County_WIC_Vendor_Locations.geojson")
 ```
@@ -26,7 +27,7 @@ wic <- readOGR("Allegheny_County_WIC_Vendor_Locations.geojson")
 ```{r}
 #Creating icon for wic data points 
 icons <- awesomeIconList(
-  makeAwesomeIcon(icon = "female", library = "fa", markerColor = "red")
+  makeAwesomeIcon(icon = "female", library = "fa", markerColor = "purple")
   )
 #Creating the color palette for senate polygons 
 symbology <- colorFactor(c("#738BC1", "#C9705E"), c("R", "D"))
@@ -48,13 +49,15 @@ leaflet() %>%
     baseGroups = c("Gray Canvas", "Dark Matter", "Topography"),
     options = layersControlOptions(collapsed = TRUE)
   ) %>%
-  #Adds Allegheny county line to map
-  addPolylines(data= county,color = "#292929") %>%
+
   #Adds senate district boundary polygon to map 
   addPolygons(data = senate, color = ~symbology(as.factor(PARTY))) %>%
   #Adds legend for senate district boundry polygon 
   addLegend(position = "bottomright", pal = symbology, values = as.factor(senate$PARTY), title = "Political Party") %>%
   #Adds markers for wic centers 
-  addAwesomeMarkers(data = wic, icon = ~icons)
+  addAwesomeMarkers(data = wic, icon = ~icons, popup = ~Address) %>%
+  #Adds Allegheny county line to map
+  addPolylines(data= county, color = "black") 
+
 ```
 
