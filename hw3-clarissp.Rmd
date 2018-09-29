@@ -31,7 +31,6 @@ icons <- awesomeIconList(
   )
 #Creating the color palette for senate polygons 
 symbology <- colorFactor(c("#738BC1", "#C9705E"), c("R", "D"))
-
 ```
 
 ```{r}
@@ -49,7 +48,7 @@ leaflet() %>%
     baseGroups = c("Gray Canvas", "Dark Matter", "Topography"),
     options = layersControlOptions(collapsed = TRUE)
   ) %>%
-
+  # Since you did all three on a single map, having the layerGroups in here might have been helpful, especially to understand what the different maps showed.
   #Adds senate district boundary polygon to map 
   addPolygons(data = senate, color = ~symbology(as.factor(PARTY))) %>%
   #Adds legend for senate district boundry polygon 
